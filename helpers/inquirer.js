@@ -75,26 +75,31 @@ const goBack = async()=>{
   return opcion
 }
 
-const listadoABorrar = async (tareas = [])=>{
+const listadoDeBusqueda = async (lugares = [])=>{
 
- const choices = tareas.map( (tarea, i) => {
+ const choices = lugares.map( (lugar, i) => {
 
   const idx = `${i+1}`
 
   return {
 
-    value: tarea.id,
-    name:  `${idx} ${tarea.desc}`.green
+    value: lugar.id,
+    name:  `${idx} ${lugar.nombre}`.green
 
   }
 
+ })
+
+ choices.unshift({
+   value:'0',
+   name:'0.'.green + 'Cancelar'
  })
  
  const questions = [
    {
      type:'list',
      name:'id',
-     message:'Borrar',
+     message:'Seleccione lugar:',
      choices,
    }
  ]
@@ -156,7 +161,7 @@ module.exports ={
   menuPrincipal,
   search,
   goBack,
-  // listadoABorrar,
+  listadoDeBusqueda,
   // confirmar,
   // completarTareas
 }

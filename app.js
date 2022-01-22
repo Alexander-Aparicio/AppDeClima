@@ -1,9 +1,13 @@
+require('dotenv').config()
 require('colors')
-const { menuPrincipal, search, goBack } = require('./helpers/inquirer');
+const { menuPrincipal, search, goBack, listadoDeBusqueda } = require('./helpers/inquirer');
 const Busquedas = require('./models/search');
+
+
 
 const App = async ()=>{
 
+    console.clear()
     const busqueda = new Busquedas()
 
     // Se determina el variable que determina las acciones del menú
@@ -29,17 +33,27 @@ const App = async ()=>{
             case 1:
                 // Mostrar msj de ingreso de búqueda
                 const lugar = await search()
-                await busqueda.ciudad(lugar)
+                const res =await busqueda.ciudad(lugar)
+                const id = await listadoDeBusqueda(res)
+                if(id==='0') continue
+
+                const lugarSelec = res.find( l => l.id === id)
+                
+                busqueda.agregarHistorial(lugarSelec.nombre)
+
+                const resClima = await busqueda.clima(lugarSelec.lat,lugarSelec.lng) 
                 // Lista de lugares encontrados
 
                 // Datos del clima del lugar
                 console.log('\n :: Información de ciudad :::\n'.green)
-                console.log('\n :: Ciudad :\n'.grey)
-                console.log('\n :: Lat :\n'.grey)
-                console.log('\n :: Lng :\n'.grey)
-                console.log('\n :: Temperatura :\n'.grey)
-                console.log('\n :: Mínima:\n'.grey)
-                console.log('\n :: Máxima:\n'.grey)
+                console.log('\n :: Ciudad :'.grey, lugarSelec.nombre)
+                console.log('\n :: Lat :'.grey, lugarSelec.lat)
+                console.log('\n :: Lng :'.grey, lugarSelec.lng)
+                console.log('\n :: Temperatura :'.grey,resClima.temp,'°C')
+                console.log('\n :: Mínima:'.grey, resClima.min)
+                console.log('\n :: Máxima:'.grey, resClima.max)
+                console.log('\n :: Descripción:'.grey, resClima.desc)
+                console.log('\n:::APP DE CLIMA'.grey)
 
                 // regresar
                 await goBack()
@@ -47,7 +61,14 @@ const App = async ()=>{
             break;
 
             case 2:
-                console.log('\n:::¡PERÚ!\n:::¡ECUADOR!\n:::¡CHILE!\n:::¡ESPAÑA!\n'.green)
+                busqueda.historial.forEach((lugar, i)=>{
+
+                    const idx = `${i+1}`
+
+                    console.log(`\n:${idx} ${lugar}\n`)
+
+                })
+                
                 await goBack()
                        
             break;
