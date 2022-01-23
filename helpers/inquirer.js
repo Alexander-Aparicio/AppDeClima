@@ -110,60 +110,11 @@ const listadoDeBusqueda = async (lugares = [])=>{
 
 }
 
-const confirmar = async(message)=>{
-
-  const questions = [
-    {
-      type:'confirm',
-      name:'ok',
-      message
-    }
-  ]
-
-  const {ok} = await inquirer.prompt(questions)
-
-  return ok
-
-}
-
-const completarTareas = async (tareas = [])=>{
-
-  const choices = tareas.map( (tarea, i) => {
- 
-   const idx = `${i+1}`
- 
-   return {
- 
-     value: tarea.id,
-     name:  `${idx} ${tarea.desc}`.green,
-      checked: (tarea.completadoEn) ? true : false
-   }
- 
-  })
-  
-  const question = [
-    {
-      type:'checkbox',
-      name:'ids',
-      message:'Selecciones',
-      choices,
-    }
-  ]
- 
-  const {ids} = await inquirer.prompt(question)
- 
-  return ids
- 
-}
-
-
 module.exports ={
   menuPrincipal,
   search,
   goBack,
-  listadoDeBusqueda,
-  // confirmar,
-  // completarTareas
+  listadoDeBusqueda
 }
 
 

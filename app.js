@@ -61,7 +61,10 @@ const App = async ()=>{
             break;
 
             case 2:
-                busqueda.historial.forEach((lugar, i)=>{
+
+                busqueda.readDB()
+
+                busqueda.historialCapitalizado.forEach((lugar, i)=>{
 
                     const idx = `${i+1}`
 
